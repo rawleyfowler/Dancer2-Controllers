@@ -3,48 +3,55 @@ package Dancer2::Controllers;
 use strict;
 use warnings;
 
-use Carp qw(croak);
-use Dancer2;
+use Carp     qw(croak);
 use Exporter qw(import);
 
-our @EXPORT_OK = qw(controllers);
+our $VERSION = '0.1';
+our @EXPORT  = qw(controllers);
 
-my %dsl = (
-    get     => \&get,
-    post    => \&post,
-    put     => \&put,
-    patch   => \&patch,
-    options => \&options,
-    del     => \&del
-);
+my %dsl;
+@dsl{qw(get post put patch del options)} = qw(1 1 1 1 1 1);
 
 sub controllers {
-    my $controllers = $_[1] ? $_[1] : $_[0];
+    my $controllers = exists $_[1] ? $_[1] : $_[0];
+    my ($package) = caller;
 
     croak
 qq{Invalid arguments for Dancer2::Controllers::controllers, please pass an array ref of controllers.}
       if ( ref($controllers) ne 'ARRAY' );
 
     foreach my $controller (@$controllers) {
-        for ( $controller->routes->@* ) {
+        croak qq{$controller has no `routes` method, please implement one.}
+          unless $controller->can('routes');
+
+        for ( $controller->routes()->@* ) {
             my ( $action, $location, $func_name_or_sub ) = @$_;
-            say @$_;
-            croak qq{Invalid action $action when registering route $location}
+
+            croak
+              qq{Invalid action `$action` when registering route `$location`}
               unless exists $dsl{$action};
+
+            croak qq{Invalid action provided for route: undef}
+              unless defined $func_name_or_sub;
 
             my $f;
             if ( ref($func_name_or_sub) eq 'CODE' ) {
                 $f = $func_name_or_sub;
             }
             else {
-                no strict;
-                $f = \&{ *{ $controller . '::' . $func_name_or_sub } };
+                $f = $controller->can($func_name_or_sub);
             }
 
             croak qq{Invalid action provided for route $func_name_or_sub}
               unless defined $f;
 
-            $dsl{$action}->( $location, $f );
+            my $cb = $package->can($action);
+
+            croak
+qq{Caller of Dancer2::Controllers::controller must `use Dancer2;`, calling package: $package does not.}
+              unless $cb;
+
+            $cb->( $location, $f );
         }
     }
 }
