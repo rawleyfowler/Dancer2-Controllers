@@ -91,7 +91,7 @@ routes inside of modules that inherit from L<Dancer2::Controllers::Controller>.
     1;
 
     use Dancer2;
-    use Dancer2::Controllers qw(controllers);
+    use Dancer2::Controllers;
 
     controllers( ['MyApp::Controller'] );
 

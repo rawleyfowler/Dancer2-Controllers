@@ -1,3 +1,12 @@
+# Dancer2::Controllers
+
+A wrapper for exporting [Dancer2](https://metacpan.org/pod/Dancer2) routes in various controller esq, modules.
+
+Similary to how Spring-Boot declares their routes, except without annotations.
+
+## Example
+
+```perl
 package MyApp::Controller;
 
 use Moo;
@@ -12,14 +21,13 @@ sub hello_world {
 }
 
 sub foo {
-    "Foo!";
+    "Foo!"
 }
 
 sub routes {
-    return [
-        [ 'get' => '/'    => 'hello_world' ],
+    return [ 
+        [ 'get' => '/' => 'hello_world' ],
         [ 'get' => '/foo' => 'foo' ],
-
         # Or, pass inline subs
         [ 'get' => '/inline' => sub { 'Inline!!!' } ]
     ];
@@ -35,3 +43,8 @@ set port => 8080;
 controllers( ['MyApp::Controller'] );
 
 dance;
+```
+
+## License
+
+Dancer2::Controllers is free software, licensed under the MIT license.
