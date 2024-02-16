@@ -2,7 +2,7 @@
 
 A wrapper for exporting [Dancer2](https://metacpan.org/pod/Dancer2) routes in various controller esq, modules.
 
-Similary to how Spring-Boot declares their routes, except without annotations.
+Similar to how Spring-Boot declares their routes, except without annotations.
 
 ## Example
 

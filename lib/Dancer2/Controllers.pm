@@ -66,8 +66,8 @@ Dancer2::Controllers
 
 =head1 SYNOPSIS
 
-Dancer2::Controllers is a OO (object-oriented) wrapper for defining Dancer2 routes, it allows you to define
-routes inside of modules that inherit from L<Dancer2::Controllers::Controller>.
+Dancer2::Controllers is a Spring-Boot esq wrapper for defining Dancer2 routes, it allows you to define
+routes inside of modules using a C<routes> method.
 
 =head1 EXAMPLE
 
@@ -78,6 +78,8 @@ routes inside of modules that inherit from L<Dancer2::Controllers::Controller>.
     use strict;
     use warnings;
 
+    # Optionally use the Dancer2::Controllers::Controller role to explicitly display
+    # that this module is a controller.
     with 'Dancer2::Controllers::Controller';
 
     sub hello_world {
@@ -85,7 +87,10 @@ routes inside of modules that inherit from L<Dancer2::Controllers::Controller>.
     }
 
     sub routes {
-        return [ [ 'get' => '/' => 'hello_world' ] ];
+        return [
+            [ 'get' => '/' => 'hello_world' ],
+            [ 'get' => '/foo' => sub { 'Foo!' } ] # or, use a subroutine!
+        ];
     }
 
     1;
@@ -106,5 +111,4 @@ routes inside of modules that inherit from L<Dancer2::Controllers::Controller>.
         'MyApp::Controller::Bar'
     ] );
 
-A subroutine that takes a list of controller module names, and registers their C<routes>
-function routes.
+A subroutine that takes a list of controller module names, and registers their C<routes>.

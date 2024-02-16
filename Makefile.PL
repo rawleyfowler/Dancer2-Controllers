@@ -7,9 +7,10 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME         => 'Dancer2::Controllers',
     VERSION_FROM => 'lib/Dancer2/Controllers.pm',
-    ABSTRACT     => qq{A tool to allow OO style route declaration in Dancer2},
-    license      => 'artistic_2',
-    META_MERGE   => {
+    ABSTRACT     =>
+      qq{A module to allow Spring-Boot style route declarations in Dancer2},
+    license    => 'artistic_2',
+    META_MERGE => {
         dynamic_config => 0,
         'meta-spec'    => { version   => 2 },
         no_index       => { directory => [ 'examples', 't' ] },
