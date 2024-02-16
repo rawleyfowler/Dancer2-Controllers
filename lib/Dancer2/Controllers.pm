@@ -6,7 +6,7 @@ use warnings;
 use Carp     qw(croak);
 use Exporter qw(import);
 
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 our @EXPORT  = qw(controllers);
 
 my %dsl;
