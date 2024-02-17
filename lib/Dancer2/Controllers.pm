@@ -16,8 +16,7 @@ sub controllers {
     my $controllers = exists $_[1] ? $_[1] : $_[0];
     my ($package) = caller;
 
-    croak
-qq{Invalid arguments for Dancer2::Controllers::controllers, please pass an array ref of controllers.}
+    croak qq{Invalid arguments for Dancer2::Controllers::controllers, please pass an array ref of controllers.}
       if ( ref($controllers) ne 'ARRAY' );
 
     foreach my $controller (@$controllers) {

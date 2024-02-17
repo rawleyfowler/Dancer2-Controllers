@@ -8,8 +8,8 @@ WriteMakefile(
     NAME         => 'Dancer2::Controllers',
     VERSION_FROM => 'lib/Dancer2/Controllers.pm',
     ABSTRACT     =>
-      qq{A module to allow Spring-Boot style route declarations in Dancer2},
-    license    => 'artistic_2',
+      qq{A module to allow Spring-Boot esq route declarations in Dancer2},
+    license    => 'mit',
     META_MERGE => {
         dynamic_config => 0,
         'meta-spec'    => { version   => 2 },
@@ -20,8 +20,7 @@ WriteMakefile(
                 web =>
                   'https://github.com/rawleyfowler/Dancer2-Controllers/issues'
             },
-            license =>
-              [qq{http://www.opensource.org/licenses/artistic-license-2.0}],
+            license    => [qq{http://www.opensource.org/licenses/mit}],
             repository => {
                 type => 'git',
                 url  => 'https://github.com/rawleyfowler/Dancer2-Controllers'
