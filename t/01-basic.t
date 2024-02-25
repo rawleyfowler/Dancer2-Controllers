@@ -2,20 +2,20 @@ package MyApp::Controller::Foo;
 
 use strict;
 use warnings;
+use Moo;
+use base 'Dancer2::Controllers::Controller';
 
-sub hello_world {
+sub hello_world : Route(get /) {
     return "Hello World!";
 }
 
-sub foo {
+sub foo : Route(get /foo) {
     return 'Foo!';
 }
 
-sub routes {
-    [ [ 'get' => '/' => 'hello_world' ], [ 'get' => '/foo' => 'foo' ] ]
-}
-
 1;
+
+package main;
 
 use Test::More;
 use Test::Exception;

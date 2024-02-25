@@ -6,52 +6,28 @@ use warnings;
 use Carp     qw(croak);
 use Exporter qw(import);
 
-our $VERSION = '0.2';
+our $VERSION = '1.0';
 our @EXPORT  = qw(controllers);
+our @ROUTES;
 
 my %dsl;
 @dsl{qw(get post put patch del options)} = qw(1 1 1 1 1 1);
 
 sub controllers {
     my $controllers = exists $_[1] ? $_[1] : $_[0];
-    my ($package) = caller;
+    for ( $controllers->@* ) {
+        my $module = $_;
+        eval { require $module; }
+          or croak qq{Couldn't evaluate package '$module' because: $@ };
+    }
+    my ($pkg) = caller;
+    for (@ROUTES) {
+        my ( $action, $location, $sub ) = @$_;
 
-    croak qq{Invalid arguments for Dancer2::Controllers::controllers, please pass an array ref of controllers.}
-      if ( ref($controllers) ne 'ARRAY' );
+        croak qq{Invalid HTTP method specified '$action' for '$location'.}
+          unless exists $dsl{$location};
 
-    foreach my $controller (@$controllers) {
-        croak qq{$controller has no `routes` method, please implement one.}
-          unless $controller->can('routes');
-
-        for ( $controller->routes()->@* ) {
-            my ( $action, $location, $func_name_or_sub ) = @$_;
-
-            croak
-              qq{Invalid action `$action` when registering route `$location`}
-              unless exists $dsl{$action};
-
-            croak qq{Invalid action provided for route: undef}
-              unless defined $func_name_or_sub;
-
-            my $f;
-            if ( ref($func_name_or_sub) eq 'CODE' ) {
-                $f = $func_name_or_sub;
-            }
-            else {
-                $f = $controller->can($func_name_or_sub);
-            }
-
-            croak qq{Invalid action provided for route $func_name_or_sub}
-              unless defined $f;
-
-            my $cb = $package->can($action);
-
-            croak
-qq{Caller of Dancer2::Controllers::controller must `use Dancer2;`, calling package: $package does not.}
-              unless $cb;
-
-            $cb->( $location, $f );
-        }
+        $pkg->$action->( $location, $sub );
     }
 }
 
@@ -77,19 +53,11 @@ routes inside of modules using a C<routes> method.
     use strict;
     use warnings;
 
-    # Optionally use the Dancer2::Controllers::Controller role to explicitly display
-    # that this module is a controller.
+    # Add the Dancer2::Controllers::Controller role to your controller classes
     with 'Dancer2::Controllers::Controller';
 
-    sub hello_world {
+    sub hello_world : Route(get => /) {
         "Hello World!";
-    }
-
-    sub routes {
-        return [
-            [ 'get' => '/' => 'hello_world' ],
-            [ 'get' => '/foo' => sub { 'Foo!' } ] # or, use a subroutine!
-        ];
     }
 
     1;
