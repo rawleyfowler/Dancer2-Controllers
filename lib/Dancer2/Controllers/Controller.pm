@@ -1,38 +1,55 @@
 package Dancer2::Controllers::Controller;
 
-use strict;
-use warnings;
-use Moo::Role;
-use Carp qw(croak);
-use B 'svref_2object';
-use Dancer2::Controllers;
+use Moose;
+use MooseX::MethodAttributes;
+use namespace::clean;
+use Dancer2;
 
-sub MODIFY_CODE_ATTRIBUTES {
-    my ( $package, $coderef, @attributes ) = @_;
-    my $sub_name = svref_2object($coderef)->GV->NAME;
-
-    my @not_allowed;
-
-    for (@attributes) {
-
-        #unless ( $_ =~ /^(get|put|post|patch|del|any).*/x ) {
-        #    push @not_allowed, $_;
-        #    next;
-        #}
-
-        my ( $action, $location ) =
-          $_ =~ /^(get|put|post|patch|del|any)\s'?"?(\([\w\-_:\/]+\))'?"?$/x;
-
-        my $fq_name = $package . '::' . $sub_name;
-        my $fq_code = \&{$fq_name};
-
-        push @Dancer2::Controllers::ROUTES, [ $action, $location, $fq_code ];
-    }
-
-    return @not_allowed;
-}
-
-sub routes {
-}
+__PACKAGE__->meta->make_immutable();
 
 1;
+
+=encoding utf8
+
+=head1 NAME
+
+Dancer2::Controllers::Controller
+
+=head1 SYNOPSIS
+
+L<Moose> base class for creating controllers.
+
+=head1 EXAMPLE
+
+    package MyApp::Controller;
+
+    use Moose;
+
+    BEGIN { extends 'Dancer2::Controllers::Controller' }
+
+    sub hello_world : Route(get => /) {
+        "Hello World!";
+    }
+
+    1;
+
+=head1 API
+
+=head2 Route attribute
+
+    package MyApp::Controller;
+
+    use Moose;
+
+    BEGIN { extends 'Dancer2::Controllers::Controller' }
+
+    sub hello_world : Route(get => /) {
+        "Hello World!";
+    }
+
+    sub foo : Route(get => /foo/bar/:id[Int]) {
+        shift->request->params->{id};
+    }
+
+The route attribute is used to defined Dancer2 routes.
+

@@ -1,15 +1,16 @@
-package MyApp::Controller::Foo;
+package Test::Controller;
 
 use strict;
 use warnings;
-use Moo;
-use base 'Dancer2::Controllers::Controller';
+use Moose;
 
-sub hello_world : Route(get /) {
+BEGIN { extends 'Dancer2::Controllers::Controller' }
+
+sub hello_world : Route(get => /) {
     return "Hello World!";
 }
 
-sub foo : Route(get /foo) {
+sub foo : Route(get => /foo) {
     return 'Foo!';
 }
 
@@ -26,7 +27,7 @@ use strict;
 use warnings;
 use Dancer2::Controllers qw(controllers);
 
-lives_ok { controllers( ['MyApp::Controller::Foo'] ) };
+lives_ok { controllers( ['Test::Controller'] ) };
 
 my $app = to_app;
 

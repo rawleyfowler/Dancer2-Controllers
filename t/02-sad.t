@@ -1,33 +1,27 @@
 package MyApp::Controller;
 
-use strict;
-use warnings;
+use Moose;
 
-sub hello_world {
+BEGIN { extends 'Dancer2::Controllers::Controller' }
+
+sub hello_world : Route(get => '') {
     "Hello World!";
 }
 
-sub foo {
+sub foo : Route(get => ) {
     'Foo!';
-}
-
-sub routes {
-    [ [ 'get' => '/' => 'hello_worl' ], [ 'get' => '/foo' => 'foo' ] ]
 }
 
 1;
 
 package MyApp::Controller::Two;
 
-use strict;
-use warnings;
+use Moose;
 
-sub hello_world {
+BEGIN { extends 'Dancer2::Controllers::Controller' }
+
+sub hello_world : Route(flarb => /) {
     "Hello World!";
-}
-
-sub routes {
-    [ [ 'flarb' => '/' => 'hello_world' ] ]
 }
 
 1;

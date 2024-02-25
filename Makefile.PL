@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 use strict;
 use warnings;
 
@@ -14,7 +15,7 @@ WriteMakefile(
         dynamic_config => 0,
         'meta-spec'    => { version   => 2 },
         no_index       => { directory => [ 'examples', 't' ] },
-        prereqs        => { runtime   => { requires => { perl => '5.014' } } },
+        prereqs        => { runtime   => { requires => { perl => '5.024' } } },
         resources      => {
             bugtracker => {
                 web =>
@@ -33,7 +34,11 @@ WriteMakefile(
         'Test::Exception'       => '0.43'
     },
     PREREQ_PM => {
-        'Dancer2' => '1.1.0',
+        'Dancer2'                  => '1.1.0',
+        'MooseX::MethodAttributes' => '0.32',
+        'Moose'                    => '2.2207',
+        'Attribute::Handlers'      => '0.99',
+        'namespace::clean'         => '0.27'
     },
     test => { TESTS => 't/*.t t/*/*.t it/*.t it/*/*.t' }
 );
