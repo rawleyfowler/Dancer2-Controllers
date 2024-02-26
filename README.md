@@ -13,8 +13,6 @@ use Moose;
 
 BEGIN { extends 'Dancer2::Controllers::Controller' }
 
-with 'Dancer2::Controllers::Controller';
-
 sub hello_world : Route(get => /) {
     "Hello World!";
 }
