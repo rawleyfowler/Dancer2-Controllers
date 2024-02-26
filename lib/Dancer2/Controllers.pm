@@ -2,7 +2,6 @@ package Dancer2::Controllers;
 
 use strict;
 use warnings;
-use DDP;
 
 use Carp     qw(croak);
 use Exporter qw(import);
